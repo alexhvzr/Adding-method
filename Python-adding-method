@@ -1,0 +1,82 @@
+import time
+#Alex van Zuiden-Rylander
+#Initial release 6/26/2018
+#Version 1.1
+#Addition method for positive string numbers.
+
+
+def add(numOne, numTwo):
+    #start = time.time()
+    
+    #checks for empty
+    if numOne or numTwo:
+
+        #takes the two strings, finds out which one is longer and makes sure you only have integers in the string
+        if len(numOne) < len(numTwo):
+            sNum = ''.join(x for x in numOne if x.isdigit())
+            lNum = ''.join(x for x in numTwo if x.isdigit())
+        else:
+            sNum = ''.join(x for x in numTwo if x.isdigit())
+            lNum = ''.join(x for x in numOne if x.isdigit())
+  
+       #indentify variables used
+        longNum = []
+        shortNum = []
+        sumation = []
+        carryOver = 0
+  
+       #takes the string of numbers and adds it into a list
+        for x in sNum:
+            shortNum.append(int(x))
+        for y in lNum:
+            longNum.append(int(y))
+   
+        #flips the shortNum so you can add starting from the "right"
+        longNum = flipList(longNum)
+        shortNum = flipList(shortNum)
+    
+        #adds a zero to the end so when fliped there is space for a value to add on
+        longNum.append(0)
+        shortNum.append(0)
+   
+       #makes sure you add only the amount of numbers from the smaller int to the bigger int
+        for p in range(0,len(sNum)+1):
+            sumation.append((longNum[p]) + int(shortNum[p]) + carryOver)
+            if sumation[p] > 10:
+                sumation[p] = sumation[p]%10 
+                carryOver = 1
+            elif sumation[p] == 10:
+                sumation[p] = 0
+                carryOver = 1
+            else:
+                carryOver = 0
+    
+        #flips the summation/larger integer back so that you can append to bigger int
+        sumation = flipList(sumation)
+        longNum = flipList(longNum)
+   
+        #deletes the amount of integers needed from the list so that you can add back on the other values
+        del longNum[len(longNum)-len(sumation):len(longNum)]
+   
+        #adds back the sumation values to the larger integer
+        for i in range(len(sumation)):
+               longNum.append(sumation[i])
+   
+        #makes list into string, then strips the leading zeros
+        answer = ''.join(str(e) for e in longNum).lstrip('0')
+        return answer
+        #end = time.time()
+        #print("Time elapsed:", end-start, "seconds")
+    else:
+        return "Error: No String integers found"
+    
+    #function to flip a shortNum values
+def flipList(list):
+    temp = []
+    for i in range(len(list)-1,-1,-1):
+        temp.append(int(list[i]))
+    return temp
+
+
+
+print(add("",""))
